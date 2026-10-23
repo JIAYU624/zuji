@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#161a18">
+  <title>烽火弦歌｜抗战烽火中的中山大学足迹地图</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css?v=20261024">
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="intro" id="intro">
+      <div class="intro-mark">1938—1946</div>
+      <h1>烽火弦歌</h1>
+      <p class="intro-sub">抗战烽火中的中山大学 · 交互式足迹地图</p>
+      <div class="intro-rule"><span></span></div>
+      <p class="intro-copy" id="introCopy"></p>
+      <div class="intro-actions">
+        <button class="btn btn-primary" id="enterBtn">开始行走 <span>→</span></button>
+      </div>
+      <div class="intro-foot">一条迁徙路线 · 四个办学阶段 · 一所不肯停课的大学</div>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-seal" role="img" aria-label="中山大学校徽"></div>
+        <div>
+          <div class="brand-title">烽火弦歌</div>
+          <div class="brand-sub">中山大学抗战迁徙足迹</div>
+        </div>
+      </div>
+      <div class="topbar-center">
+        <button class="mode-btn is-active" id="storyModeBtn">叙事模式</button>
+        <button class="mode-btn" id="freeModeBtn">自由探索</button>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="layersBtn" title="图层控制" aria-label="图层控制">图层</button>
+        <button class="icon-btn" id="imageBtn" title="史料原图" aria-label="史料原图">原图</button>
+      </div>
+    </header>
+
+    <main class="stage">
+      <section class="map-shell" id="mapShell">
+        <div class="map-sheet" id="mapSheet">
+          <div class="tencent-map" id="tencentMap" aria-label="腾讯地图官方底图"></div>
+
+          <div class="map-top-left">
+            <div class="map-scene-label" id="mapSceneLabel">序章 · 广州</div>
+            <div class="map-live-badge"><span class="live-dot"></span><span id="mapLiveText">腾讯地图 · 实时底图</span></div>
+          </div>
+
+          <div class="tencent-status" id="tencentStatus" aria-hidden="true">
+            <span id="tencentStatusText">腾讯地图 · 正在准备</span>
+            <button id="tencentKeyBtn" type="button">配置 Key</button>
+          </div>
+
+          <div class="route-legend" id="routeLegend" aria-label="迁徙路线图例">
+            <div class="route-legend-title">迁徙路线</div>
+            <div class="route-legend-item"><i style="--c:#b64b35"></i><span>第一次迁徙<small>广州—澄江</small></span></div>
+            <div class="route-legend-item"><i style="--c:#a56b2a"></i><span>第二次迁徙<small>澄江—坪石</small></span></div>
+            <div class="route-legend-item"><i style="--c:#7c4a63"></i><span>第三次迁徙<small>坪石—粤北／粤东</small></span></div>
+            <div class="route-legend-item"><i style="--c:#4f6b50"></i><span>复员广州<small>1945—1946</small></span></div>
+            <div class="route-legend-item is-alt"><i style="--c:#3c6b74"></i><span>海路／内地线<small>辅助路线</small></span></div>
+          </div>
+
+          <div class="playback-status" id="playbackStatus" aria-hidden="true">
+            <span class="playback-dot"></span>
+            <span id="playbackText">准备出发…</span>
+          </div>
+
+          <div class="map-actions">
+            <button id="playRouteBtn" type="button">▶ 播放迁徙</button>
+            <button id="currentSceneBtn" type="button">⌖ 回到本章</button>
+          </div>
+
+          <div class="map-loading" id="mapLoading">
+            <div class="map-spinner"></div>
+            <span>正在加载腾讯地图官方底图…</span>
+          </div>
+          <div class="map-error" id="mapError" aria-hidden="true">
+            <strong>腾讯地图暂未加载</strong>
+            <span id="mapErrorText">请检查网络与 Key 配置。</span>
+            <button class="btn btn-small btn-primary" id="mapRetryBtn">重新加载</button>
+          </div>
+
+          <div class="map-tip" id="mapTip"></div>
+        </div>
+
+        <aside class="side-panel" id="sidePanel">
+          <div class="panel-scroll" id="panelScroll">
+            <div class="chapter-kicker" id="chapterKicker">序章 · 1937—1938</div>
+            <h2 id="chapterTitle">广州：警报声中的校园</h2>
+            <p class="chapter-text" id="chapterText"></p>
+            <div class="chapter-quote" id="chapterQuote"></div>
+            <div class="keyword-row" id="keywordRow"></div>
+            <div class="panel-tabs" role="tablist" aria-label="内容标签">
+              <button class="tab is-active" data-tab="overview" role="tab">地点</button>
+              <button class="tab" data-tab="events" role="tab">事件</button>
+              <button class="tab" data-tab="people" role="tab">人物</button>
+              <button class="tab" data-tab="images" role="tab">图像</button>
+            </div>
+            <div class="tab-content" id="tabContent"></div>
+          </div>
+          <div class="chapter-nav">
+            <button class="btn btn-small btn-ghost" id="prevBtn">← 上一站</button>
+            <div class="chapter-progress"><span id="chapterProgress">1 / 6</span></div>
+            <button class="btn btn-small btn-primary" id="nextBtn">下一站 →</button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="timeline">
+      <div class="timeline-head">
+        <div class="timeline-now"><span id="yearLabel">1937</span><small>时间轴</small></div>
+        <button class="play-btn" id="playBtn" aria-label="播放时间轴">▶</button>
+      </div>
+      <div class="timeline-track">
+        <input type="range" id="yearRange" min="1937" max="1946" step="0.1" value="1937" aria-label="时间轴">
+        <div class="timeline-ticks" id="timelineTicks"></div>
+      </div>
+      <div class="timeline-scenes" id="timelineScenes"></div>
+    </footer>
+  </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+  <aside class="drawer" id="personDrawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div><div class="drawer-kicker">PEOPLE</div><h3 id="personDrawerTitle">人物</h3></div>
+      <button class="close-btn" data-close="personDrawer" aria-label="关闭">×</button>
+    </div>
+    <div class="drawer-body" id="personDetail"></div>
+  </aside>
+
+  <div class="modal" id="imageModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="close-btn modal-close" data-close="imageModal" aria-label="关闭">×</button>
+      <div class="modal-kicker" id="imageModalKicker">ARCHIVE IMAGE</div>
+      <img id="imageModalImg" src="assets/route-reference.jpg" alt="抗战时期中山大学迁徙路线参考图">
+      <div class="modal-caption" id="imageModalCaption">抗战时期中山大学迁徙路线图（历史参考）</div>
+    </div>
+  </div>
+
+  <div class="modal" id="tencentKeyModal" aria-hidden="true">
+    <div class="modal-card key-card">
+      <button class="close-btn modal-close" data-close="tencentKeyModal" aria-label="关闭">×</button>
+      <div class="modal-kicker">TENCENT MAPS · OFFICIAL BASEMAP</div>
+      <h3>配置腾讯地图 Key</h3>
+      <p class="key-copy">当前地图使用腾讯位置服务 JavaScript API GL。请在腾讯位置服务控制台创建 Key，启用 JavaScript API GL，并把 <code>localhost</code> 或部署域名加入白名单。</p>
+      <label class="key-label" for="tencentKeyInput">腾讯地图 Key</label>
+      <input id="tencentKeyInput" class="key-input" type="text" autocomplete="off" spellcheck="false" placeholder="粘贴你的 JavaScript API GL Key">
+      <div class="key-actions">
+        <button class="btn btn-primary" id="tencentKeySave">保存并加载</button>
+        <button class="btn btn-ghost" data-close="tencentKeyModal">稍后再说</button>
+      </div>
+      <p class="key-message" id="tencentKeyMessage"></p>
+      <p class="key-hint">当前交付版本已在 <code>config.js</code> 中写入 Key。正式部署时请收紧域名白名单；本页不会把 Key 写入项目文件。</p>
+    </div>
+  </div>
+
+  <div class="layer-pop" id="layerPop">
+    <div class="pop-title">图层控制</div>
+    <label><input type="checkbox" data-layer="routes" checked><span>迁徙路线</span></label>
+    <label><input type="checkbox" data-layer="markers" checked><span>办学地点</span></label>
+    <label><input type="checkbox" data-layer="waypoints" checked><span>途经节点</span></label>
+    <label><input type="checkbox" data-layer="legend" checked><span>路线图例</span></label>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="config.js?v=20261022"></script>
+  <script src="data.js?v=20261022"></script>
+  <script src="app.js?v=20261027"></script>
+</body>
+</html>
